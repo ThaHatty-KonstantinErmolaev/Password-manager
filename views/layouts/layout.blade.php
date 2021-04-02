@@ -21,7 +21,7 @@
 
             @if(session()->get('is_authorised') == true)
                 <div class="me-3 py-2 text-white text-decoration-none ">
-                    <a class="btn btn-outline-dark text-white" href="user">Личный кабинет</a>
+                    <a class="btn btn-outline-dark text-white" href="/laravel/password.local/public/user">Личный кабинет</a>
                 </div>
             @endif
 
@@ -59,5 +59,6 @@
         @yield('main_content')
     </main>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
 </body>
 </html>
