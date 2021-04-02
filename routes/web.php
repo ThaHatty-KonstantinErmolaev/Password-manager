@@ -34,6 +34,12 @@ Route::get('/login', [UserController::class,'authorisation'])->name('login');
 // путь на страницу авторизации
 
 
+Route::get('/password/create', [PasswordController::class,'create'])->name('new_password');
+//
+Route::get('/password/validate', [PasswordController::class,'store'])->name('validate_password');
+//
+
+
 Route::get('/{user_id}',[UserController::class,'show'])->name('user');
 // путь для личного кабинета
 Route::get('/{id}/edit',[UserController::class,'edit']);
@@ -42,5 +48,5 @@ Route::get('/profile/validate',[UserController::class,'update']);
 // путь для валидации и обновления данных учётной записи в бд
 
 
-Route::get('/password/create', [PasswordController::class,'create'])->name('new_password');
+
 
