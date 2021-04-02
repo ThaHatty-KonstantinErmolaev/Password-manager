@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Password;
+use App\Models\PasswordCategory\Category;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -30,7 +32,9 @@ class UserController extends Controller
     {
         $roles = new Role;
 
-        return view('register', ['roles' => $roles->all()->where('parent_id','>',1)]);
+        return view('register', [
+            'roles' => $roles->all()->where('parent_id','>',1)
+        ]);
     }
 
     public function find_user($id)
@@ -52,6 +56,40 @@ class UserController extends Controller
             'email'     =>  $user['email'],
         ];
         return $userInfo;
+    }
+
+    public function find_password_by_user($user_id)
+    {
+
+        $passwords = new Password;
+        $passwords = $passwords
+            ->all()
+            ->where('user_id',$user_id); // all user's passwords
+
+        foreach($passwords as $password) {
+
+            $role = Role::query()
+                ->where('id',$password['password_role_id'])
+                ->first();  // password's role
+
+            $category = Category::query()
+                ->where('id',$password['category_id'])
+                ->first();  // password's category
+
+            $passwords_info[] = [
+                'id'            =>  $password['id'],
+                'name'          =>  $password['name'],
+                'user_id'       =>  $password['user_id'],
+                'category'      =>  $category['name'],          //category name
+                'value'         =>  $password['value'],
+                'login'         =>  $password['login'],
+                'tags'          =>  $password['value'],
+                'description'   =>  $password['description'],
+                'role'          =>  $role['name'],              //role name
+            ];
+        }
+
+        return $passwords_info;
     }
 
 
@@ -99,13 +137,13 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $user = User::create([
-            'role_id' => $request['role_id'],
-            'firstname' => $request['firstname'],
-            'surname' => $request['surname'],
-            'login' => $request['login'],
-            'email' => $request['email'],
-            'password' => $request['password'],
-            'remember_token' => Str::random(10),
+            'role_id'           =>  $request['role_id'],
+            'firstname'         =>  $request['firstname'],
+            'surname'           =>  $request['surname'],
+            'login'             =>  $request['login'],
+            'email'             =>  $request['email'],
+            'password'          =>  $request['password'],
+            'remember_token'    =>  Str::random(10),
         ]);
     }
 
@@ -116,7 +154,7 @@ class UserController extends Controller
             'firstname' =>  'required|max:20|string',
             'surname'   =>  'required|max:20',
             'login'     =>  'required|unique:users|min:6|max:20',
-            'email'     =>  'required|min:4|max:40',
+            'email'     =>  'required|min:6|max:40',
             'password'  =>  'required|min:6|max:30',
         ]);
 
@@ -133,10 +171,19 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        $id = session()->get('user_id');
-        $userInfo = $this->find_user($id);
+
         if ( session()->get('is_authorised') == true && session()->exists('user_id') ) {
-            return view('user/userpage', ['user_info'    =>  $userInfo]);
+
+            $id = session()->get('user_id');
+            $userInfo = $this->find_user($id);
+
+            $password = new Password;
+            $userPasswords = $this->find_password_by_user($id); // user's passwords
+
+            return view('user/userpage', [
+                'user_info'         =>  $userInfo,
+                'user_passwords'    =>  $userPasswords,
+            ]);
         } else {
             return redirect()->route('home');
         }

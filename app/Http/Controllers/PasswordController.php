@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Password;
 use App\Models\PasswordCategory\Category;
+use App\Models\Role;
 use Illuminate\Http\Request;
 
 class PasswordController extends Controller
@@ -26,9 +27,18 @@ class PasswordController extends Controller
     public function create()
     {
         $categories = new Category;
+        $roles = new Role;
 
         if ( session()->get('is_authorised') == true && session()->exists('user_id') ) {
-            return view('password/create_password', ['categories' => $categories->all()]);
+            $user_id    =   session()->get('user_id');
+            $user_role  =   $roles->where('id','=',$user_id)->first();
+            $all_roles  =   $roles->all();
+            return view('password/create_password', [
+                'categories'    =>  $categories->all(),
+                'user_id'       =>  $user_id,
+                'user_role'     =>  $user_role,
+                'all_roles'     =>  $all_roles,
+            ]);
         } else {
             return redirect()->route('home');
         }
@@ -42,9 +52,29 @@ class PasswordController extends Controller
      */
     public function store(Request $request)
     {
-        $password = Password::create([
-            'name'  =>  $request['name'],
+        $valid = $request->validate([
+            'name'              =>  'required|max:30',
+            'user_id'           =>  'required',
+            'category_id'       =>  'required',
+            'value'             =>  'required',
+            'login'             =>  'required',
+            'tags',
+            'description'       =>  'max:100',
+            'password_role_id'  =>  'required',
         ]);
+
+        $password = Password::create([
+            'name'              =>  $request['name'],
+            'user_id'           =>  $request['user_id'],
+            'category_id'       =>  $request['category_id'],
+            'value'             =>  $request['value'],
+            'login'             =>  $request['login'],
+            'tags'              =>  $request['tags'],
+            'description'       =>  $request['description'],
+            'password_role_id'  =>  $request['password_role_id'],
+        ]);
+
+        return redirect()->route('home');
     }
 
     /**
