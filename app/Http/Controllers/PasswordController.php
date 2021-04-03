@@ -33,6 +33,7 @@ class PasswordController extends Controller
             $user_id    =   session()->get('user_id');
             $user_role  =   $roles->where('id','=',$user_id)->first();
             $all_roles  =   $roles->all();
+            session()->put(['has_passwords'    =>  'true']);
             return view('password/create_password', [
                 'categories'    =>  $categories->all(),
                 'user_id'       =>  $user_id,
@@ -119,6 +120,19 @@ class PasswordController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Password::query()->where('id',$id)->delete();
+
+    }
+
+    public function delete() {
+
+        $id = $_GET['id'];
+
+        if ( session()->get('is_authorised') == true && session()->exists('user_id') ) {
+            $this->destroy($id);
+            return redirect()->route('home');
+        } else {
+            return redirect()->route('home');
+        }
     }
 }

@@ -172,7 +172,7 @@ class UserController extends Controller
     public function show($id)
     {
 
-        if ( session()->get('is_authorised') == true && session()->exists('user_id') ) {
+        if ( session()->get('is_authorised') == true && session()->exists('user_id') && session()->get('has_passwords') == true ) {
 
             $id = session()->get('user_id');
             $userInfo = $this->find_user($id);
@@ -180,9 +180,20 @@ class UserController extends Controller
             $password = new Password;
             $userPasswords = $this->find_password_by_user($id); // user's passwords
 
+
             return view('user/userpage', [
                 'user_info'         =>  $userInfo,
                 'user_passwords'    =>  $userPasswords,
+            ]);
+        } elseif( session()->get('is_authorised') == true && session()->exists('user_id') && session()->exists('has_passwords') == false ) {
+
+            $id = session()->get('user_id');
+
+            $userInfo = $this->find_user($id);
+
+            return view('user/userpage', [
+                'user_info'         =>  $userInfo,
+                'user_passwords'    =>  false,
             ]);
         } else {
             return redirect()->route('home');
@@ -246,6 +257,26 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
+        User::query()->where('id',$id)->delete();
+    }
+
+    public function delete()
+    {
+        if ( session()->get('user_id') == 1) {
+            return redirect()->route('home');
+        } else {
+
+            if ( session()->get('is_authorised') == true && session()->exists('user_id') ) {
+
+                $id = $_GET['id'];
+                $this->destroy($id);
+                session()->forget('is_authorised');
+                session()->forget('user_id');
+                return redirect()->route('home');
+
+            } else {
+                return redirect()->route('home');
+            }
+        }
     }
 }
