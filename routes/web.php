@@ -38,8 +38,12 @@ Route::get('/password/create', [PasswordController::class,'create'])->name('new_
 //
 Route::get('/password/validate', [PasswordController::class,'store'])->name('validate_password');
 //
+Route::get('/password/delete', [PasswordController::class,'delete'])->name('delete_password');
+//
 
 
+Route::get('/profile/delete',[UserController::class,'delete']);
+//
 Route::get('/{user_id}',[UserController::class,'show'])->name('user');
 // путь для личного кабинета
 Route::get('/{id}/edit',[UserController::class,'edit']);
