@@ -9,7 +9,7 @@
         <div class="row justify-content-center">
             <div class="col-6">
 
-                <h2 class="text-center">Новый пароль</h2>
+                <h2 class="text-center">Изменить пароль</h2>
 
                 @if( $errors->any())
                     <div class="alert alert-danger">

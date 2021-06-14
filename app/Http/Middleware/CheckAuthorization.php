@@ -19,7 +19,6 @@ class CheckAuthorization
         if (session()->get('is_authorised') == false || !session()->exists('user_id')) {
             return redirect()->route('home');
         }
-
         return $next($request);
     }
 }

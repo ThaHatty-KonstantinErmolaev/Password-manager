@@ -16,17 +16,19 @@ class CreatePasswordsTable extends Migration
         Schema::create('passwords', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            //$table->unsignedBigInteger('category_id');
             $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('category_id');
             $table->string('value');
             $table->string('login');
+            $table->text('tags')->nullable();
             $table->text('description')->nullable();
             $table->unsignedBigInteger('password_role_id');
             $table->timestamps();
         });
         Schema::table('passwords', function (Blueprint $table) {
             $table->foreign('password_role_id')->references('id')->on('roles');
-            //$table->foreign('category_id')->references('id')->on('password_categories');
+            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('category_id')->references('id')->on('categories');
         });
     }
 

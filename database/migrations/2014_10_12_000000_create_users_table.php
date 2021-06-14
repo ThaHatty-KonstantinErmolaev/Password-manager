@@ -25,8 +25,6 @@ class CreateUsersTable extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
 
-            //$table->unsignedBigInteger('password_id')->nullable();
-
             $table->rememberToken();
 
             $table->timestamps();
@@ -34,7 +32,6 @@ class CreateUsersTable extends Migration
         });
         Schema::table('users', function (Blueprint $table) {
             $table->foreign('role_id')->references('id')->on('roles');
-            //$table->foreign('password_id')->references('id')->on('passwords');
         });
     }
 

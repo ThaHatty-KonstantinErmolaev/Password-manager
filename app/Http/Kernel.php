@@ -53,8 +53,7 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $routeMiddleware = [
-        'prevent_multi_authorization'   => \App\Http\Middleware\EncryptCookies::class,
-        'check_authorization'           => \App\Http\Middleware\CheckAuthorization::class,
+        'check_authorization'     => \App\Http\Middleware\CheckAuthorization::class,
 
         'auth' => \App\Http\Middleware\Authenticate::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,

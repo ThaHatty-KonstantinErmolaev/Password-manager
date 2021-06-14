@@ -32,6 +32,6 @@ class CategoriesTableSeeder extends Seeder
         }
 
 
-        DB::table('password_categories')->insert($categories);
+        DB::table('categories')->insert($categories);
     }
 }

@@ -13,17 +13,13 @@ class CreatePasswordCategoriesTable extends Migration
      */
     public function up()
     {
-        Schema::create('password_categories', function (Blueprint $table) {
+        Schema::create('categories', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->unsignedBigInteger('password_id')->nullable();
 
             $table->integer('parent_id')->unsigned()->default(0)->nullable();
 
             $table->timestamps();
-        });
-        Schema::table('password_categories', function (Blueprint $table) {
-            $table->foreign('password_id')->references('id')->on('passwords');
         });
     }
 
