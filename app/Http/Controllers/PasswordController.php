@@ -101,7 +101,7 @@ class PasswordController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
-    {
+    {//
         $password = Password::find($id);
         $categories = PasswordCategory::all();//$password->categories();
         return view('password/edit_password',[
