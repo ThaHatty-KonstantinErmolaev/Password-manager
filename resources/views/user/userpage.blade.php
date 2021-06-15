@@ -25,8 +25,6 @@
                 <br>
                 <span>Логин: {{ $user_info['login'] }}</span>
                 <br>
-                <span>Пароль: {{ $user_info['password'] }}</span>
-                <br>
                 <span>Роль: {{ $user_info['role']['name'] }}</span>
                 <br>
                 <button class="col-2 btn btn-outline-info"><a href="/profile/edit?id={{ $user_info['id'] }}" class="text-decoration-none text-info">Редактировать</a></button>

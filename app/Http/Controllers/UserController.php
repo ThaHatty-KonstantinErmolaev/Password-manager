@@ -7,6 +7,7 @@ use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use mysql_xdevapi\Session;
 
@@ -51,9 +52,9 @@ class UserController extends Controller
 
         $user = User::query()
             ->where('login',$request['login'])
-            ->where('password',$request['password'])
             ->first();
-        if ($user) {
+        $pass = $user['password'];
+        if ($user && Hash::check($request['password'], $pass)) {
             $id = $user['id'];
             $request->session()->put(['is_authorised' => 'true']);
             $request->session()->put(['user_id' => $id]);
@@ -85,7 +86,7 @@ class UserController extends Controller
             'surname'           =>  $request['surname'],
             'login'             =>  $request['login'],
             'email'             =>  $request['email'],
-            'password'          =>  $request['password'],
+            'password'          =>  Hash::make($request['password']),
             'remember_token'    =>  Str::random(10),
         ]);
         $user->push();
@@ -177,7 +178,9 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        User::query()->where('id',$id)->delete();
+        //User::query()->where('id',$id)->delete();
+        $user = new User;
+        $user->find($id)->delete();
     }
 
     public function delete()

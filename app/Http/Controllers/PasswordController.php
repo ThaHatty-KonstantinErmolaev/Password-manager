@@ -7,7 +7,9 @@ use App\Models\PasswordCategory\PasswordCategory;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Hash;
 
 class PasswordController extends Controller
 {
@@ -69,7 +71,7 @@ class PasswordController extends Controller
             'name'              =>  $request['name'],
             'user_id'           =>  session()->get('user_id'),//брать из сессии
             //'category_id'       =>  $request['category_id'],
-            'value'             =>  $request['value'],
+            'value'             =>  Crypt::encryptString($request['value']),
             'login'             =>  $request['login'],
             'description'       =>  $request['description'],
             'password_role_id'  =>  $request['password_role_id'],

@@ -21,7 +21,9 @@
                                 <br>
                             @endforeach
                             <p class="card-text">{{ $item['description'] }}</p>
-                            <p class="card-text">Пароль: <span class="text-warning">{{ $item['value'] }}</span></p>
+                            <p class="card-text">
+                                Пароль: <span class="text-warning">{{ Crypt::decryptString($item['value']) }}</span>
+                            </p>
                             <input type="hidden" value="{{ $item['id'] }}" id="id" name="id">
                             <div>
                                 <a href="/password/edit/{{ $item['id']}}" class="btn btn-primary">Подробнее</a>
