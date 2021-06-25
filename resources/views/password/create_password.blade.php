@@ -32,21 +32,21 @@
                     <br>
 
                     <label for="name">Название пароля</label>
-                    <input type="text" class="form-control" name="name" id="name" placeholder="Пароль от">
+                    <input type="text" class="form-control" name="password[name]" id="name" placeholder="Пароль от">
                     <br>
 
                     <label for="value">Пароль</label>
-                    <input type="password" class="form-control" name="value" id="value">
+                    <input type="password" class="form-control" name="password[value]" id="value">
                     <br>
 
                     <label for="login">Логин</label>
-                    <input type="text" class="form-control" name="login" id="login" placeholder="Логин от которого пароль">
+                    <input type="text" class="form-control" name="password[login]" id="login" placeholder="Логин от которого пароль">
                     <br>
 
                     @if( session()->get('is_authorised') == true && session()->get('user_id') == 1 )
 
                         <label for="role">Роль для которой пароль будет отображаться</label>
-                        <select name="password_role_id" id="password_role_id" class="form-control">
+                        <select name="password[password_role_id]" id="password_role_id" class="form-control">
                             @foreach($all_roles as $role)
 
                                 <option value="{{ $role['id'] }}">{{ $role['name'] }}</option>
@@ -56,14 +56,14 @@
                         <br>
 
                     @else
-                        <input type="hidden" class="form-control" name="password_role_id" id="password_role_id" value="{{ $user['role']['id'] }}">
+                        <input type="hidden" class="form-control" name="password[password_role_id]" id="password_role_id" value="{{ $user['role']['id'] }}">
                     @endif
 
                     <label for="description">Описание</label>
-                    <textarea class="form-control" name="description" id="description" maxlength="100"></textarea>
+                    <textarea class="form-control" name="password[description]" id="description" maxlength="100"></textarea>
                     <br>
 
-                    <input type="hidden" class="form-control" name="user_id" id="user_id" value="{{ $user['id'] }}">
+                    <input type="hidden" class="form-control" name="password[user_id]" id="user_id" value="{{ $user['id'] }}">
 
                     <button type="submit" class="btn btn-success text-white">Отправить</button>
                 </form>
