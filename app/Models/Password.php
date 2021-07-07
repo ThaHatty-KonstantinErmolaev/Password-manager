@@ -19,6 +19,16 @@ class Password extends Model
         'password_role_id',
     ];
 
+    public function setValueAttribute($val) {
+        $this->value = Crypt::encryptString($val);
+    }
+    
+    public function setUserIdAttribute($val) {
+        // ??????
+    }
+    
+    
+    
     public function categories() {
         return $this->belongsToMany('\App\Models\PasswordCategory\PasswordCategory', 'category_password');
     }

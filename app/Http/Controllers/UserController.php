@@ -49,16 +49,19 @@ class UserController extends Controller
             'login'     =>  'required',
             'password'  =>  'required',
         ]);
-
         $user = User::query()
             ->where('login',$request['login'])
             ->first();
-        $pass = $user['password'];
-        if ($user && Hash::check($request['password'], $pass)) {
-            $id = $user['id'];
-            $request->session()->put(['is_authorised' => 'true']);
-            $request->session()->put(['user_id' => $id]);
-            return redirect()->route('home');
+        if ($user) {
+            $pass = $user['password'];
+            if ($user && Hash::check($request['password'], $pass)) {
+                $id = $user['id'];
+                $request->session()->put(['is_authorised' => 'true']);
+                $request->session()->put(['user_id' => $id]);
+                return redirect()->route('home');
+            } else {
+                return view('login', ['err'   =>  'Вы неправильно ввели данные']);
+            }
         } else {
             return view('login', ['err'   =>  'Вы неправильно ввели данные']);
         }
@@ -104,6 +107,9 @@ class UserController extends Controller
         ]);
 
         $this->store($request);
+        $id = $request['id'];
+        $request->session()->put(['is_authorised' => 'true']);
+        $request->session()->put(['user_id' => $id]);
 
         return redirect()->route('home');
     }

@@ -67,15 +67,8 @@ class PasswordController extends Controller
 
         //метод fill чтобы не пришло лишнее
         $password = new Password();
-        $password->fill([
-            'name'              =>  $request['name'],
-            'user_id'           =>  session()->get('user_id'),//брать из сессии
-            //'category_id'       =>  $request['category_id'],
-            'value'             =>  Crypt::encryptString($request['value']),
-            'login'             =>  $request['login'],
-            'description'       =>  $request['description'],
-            'password_role_id'  =>  $request['password_role_id'],
-        ]);
+        $pass_data = $request['password'];
+        $password->fill($pass_data);
 
         $password->push();
         foreach ($request['category_id'] as $category) {
